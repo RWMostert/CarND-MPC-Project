@@ -3,6 +3,44 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+# The Model
+The vehicle model employed was a kinematic model with 4 vehicle state properties and 2 vehicle actuators.
+In the model, the vehicle state at time t, consists of:
+- x and y coördinates, which define the vehicle position
+- psi, defining the orientation of the vehicle
+- v, which defines the vehicle velocity.
+
+The two actuators (at a specified time t) are:
+- a, the acceleration level
+- delta, the steering angle.
+
+The update equations are given by
+
+INSERT PICTURE
+
+# Timestep Length and Elapsed Duration (N & dt)
+When setting a timestep length N, one needs to consider the complexity of the polynomial. Since we only use a 3rd order polynomial to fit the track, we cannot set N to be too large. Recall that a 3rd order polynomial may have only one point of inflextion. Hence we wouldn't be able to fit the polynomial to a track that has many twists and turns. Hence the timestep N must provide enough foresight to drive safely, while not looking to far ahead for the polynomial to handle.
+
+The effect of this is clear when I first set N=25. See in the video below, how the polynomial struggles to fit to the part of the road with multiple curves. This causes unnecessary oscilation and instability.
+
+INSERT VIDEO
+
+After experimenting with multiple values for N, the best value was N = 10. Similarly dt was chosen by experimentation, taking into account the size of N. The model needs to follow the general shape of the road and not act too vigorously to turns. This led to a dt value of 0.1 seconds.
+
+# Dealing with Latency
+
+Latency was dealt with by simply using the kinematic vehicle model described to forecast the vehicle state 100ms (or whatever the lag is) ahead. This updated vehicle state was then used rather than the standard zero x and y position. The effect of this is that at any point t, we use the kinematic model to guess where the car might be at some time t + dt (the lag). We then base the MPC on the predicted state of the car at time t + dt. This has the effect of compensating for the real world lag by approximating the future vehicle position.
+
+Hence, for any lag, given the current vehicle state ```(x0, y0, psi0, v0)``` with actuator values ```(a0, delta0)``` set the initial positions to:
+
+```
+latent_x = x0 + lag * v0 * cos(psi0)
+latent_y = y0 + lag * v0 * sin(psi0)
+latent_v = v0 + lag * a0
+latent_psi = psi0 + lag * v0 * delta0 / L
+```
+where ```L``` is the distance between the front of the vehicle and its center of gravity.
+
 ## Dependencies
 
 * cmake >= 3.5
