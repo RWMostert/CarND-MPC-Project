@@ -1,6 +1,8 @@
 # CarND-Controls-MPC
 Self-Driving Car Engineer Nanodegree Program
 
+![demo](MPC.gif)
+(https://youtu.be/njzM5DV4vD0)
 ---
 
 # The Model
@@ -16,14 +18,15 @@ The two actuators (at a specified time t) are:
 
 The update equations are given by
 
-
+![equations](kinetic_equations.jpg)
 
 # Timestep Length and Elapsed Duration (N & dt)
 When setting a timestep length N, one needs to consider the complexity of the polynomial. Since we only use a 3rd order polynomial to fit the track, we cannot set N to be too large. Recall that a 3rd order polynomial may have only one point of inflextion. Hence we wouldn't be able to fit the polynomial to a track that has many twists and turns. Hence the timestep N must provide enough foresight to drive safely, while not looking to far ahead for the polynomial to handle.
 
 The effect of this is clear when I first set N=25. See in the video below, how the polynomial struggles to fit to the part of the road with multiple curves. This causes unnecessary oscilation and instability.
 
-INSERT VIDEO
+![demo](25N.gif)
+(https://youtu.be/jXHfatKap4U)
 
 After experimenting with multiple values for N, the best value was N = 10. Similarly dt was chosen by experimentation, taking into account the size of N. The model needs to follow the general shape of the road and not act too vigorously to turns. This led to a dt value of 0.1 seconds.
 
