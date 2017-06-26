@@ -124,8 +124,8 @@ int main() {
                     // With the initial state, we assume psi = 0, hence sin(psi) = 0 and there is only movement in the x direction.
                     double lag = 0.1;
                     double latent_px = lag * v;
-                    double latent_psi = -lag * (v / Lf) * steer_value;
                     double latent_v = v + lag * throttle_value;
+                    double latent_psi = -lag * (v / Lf) * steer_value;
                     double latent_cte = polyeval(coeffs, lag);
 
                     // With lag compensation:
