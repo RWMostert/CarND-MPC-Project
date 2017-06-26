@@ -16,7 +16,7 @@ The two actuators (at a specified time t) are:
 
 The update equations are given by
 
-INSERT PICTURE
+
 
 # Timestep Length and Elapsed Duration (N & dt)
 When setting a timestep length N, one needs to consider the complexity of the polynomial. Since we only use a 3rd order polynomial to fit the track, we cannot set N to be too large. Recall that a 3rd order polynomial may have only one point of inflextion. Hence we wouldn't be able to fit the polynomial to a track that has many twists and turns. Hence the timestep N must provide enough foresight to drive safely, while not looking to far ahead for the polynomial to handle.
